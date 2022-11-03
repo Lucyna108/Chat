@@ -17,6 +17,8 @@ const addChatForm = document.querySelector('#addChatForm');
 const addAuthor = document.querySelector('#addAuthor');
 const addMessage = document.querySelector('#addMessage');
 const chatWindow = document.querySelector('#chatWindow');
+const searchForm = document.querySelector('#searchForm');
+const searchInput = document.querySelector('#searchInput');
 let messages = JSON.parse(localStorage.getItem('messages'));
 
 if (messages === null) {
@@ -44,4 +46,24 @@ const handleSubmit = (event) => {
 	addMessage.value = '';
 };
 
+const handleSearch = (event) => {
+	event.preventDefault();
+	const searchInputValue = searchInput.value;
+
+	const searchResult = messages.filter((messageResult) => {
+		return messageResult.messageValue.includes(searchInputValue);
+	});
+
+	if (searchResult.length !== 0) {
+		searchResult.forEach((result) => {
+			chatWindow.innerHTML = `<li> ${result.messageValue}</li>`;
+		});
+	} else {
+		chatWindow.innerHTML = `Nie znaleziono wpisu`;
+	}
+
+	searchInput.value = '';
+};
+
 addChatForm.addEventListener('submit', handleSubmit);
+searchForm.addEventListener('submit', handleSearch);
